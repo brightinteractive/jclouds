@@ -21,6 +21,7 @@ import static com.google.common.io.BaseEncoding.base16;
 import static org.jclouds.http.HttpUtils.attemptToParseSizeAndRangeFromHeaders;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.blobstore.domain.BlobMetadata;
 import org.jclouds.blobstore.functions.ParseSystemAndUserMetadataFromHeaders;
@@ -60,7 +61,7 @@ public class ParseObjectInfoFromHeaders implements Function<HttpResponse, Mutabl
       to.setBytes(attemptToParseSizeAndRangeFromHeaders(from));
       to.setContainer(container);
       to.setUri(base.getUri());
-      String eTagHeader = from.getFirstHeaderOrNull("Etag");
+      String eTagHeader = from.getFirstHeaderOrNull(HttpHeaders.ETAG);
       if (eTagHeader != null) {
          to.setHash(base16().lowerCase().decode(eTagHeader));
       }
