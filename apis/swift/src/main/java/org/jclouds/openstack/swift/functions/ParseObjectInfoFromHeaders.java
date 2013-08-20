@@ -17,7 +17,6 @@
 package org.jclouds.openstack.swift.functions;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.io.BaseEncoding.base16;
 import static org.jclouds.http.HttpUtils.attemptToParseSizeAndRangeFromHeaders;
 
 import javax.inject.Inject;
@@ -29,6 +28,7 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.openstack.swift.blobstore.functions.ResourceToObjectInfo;
 import org.jclouds.openstack.swift.domain.MutableObjectInfoWithMetadata;
+import org.jclouds.openstack.swift.utils.ETagUtils;
 import org.jclouds.rest.InvocationContext;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
@@ -63,7 +63,7 @@ public class ParseObjectInfoFromHeaders implements Function<HttpResponse, Mutabl
       to.setUri(base.getUri());
       String eTagHeader = from.getFirstHeaderOrNull(HttpHeaders.ETAG);
       if (eTagHeader != null) {
-         to.setHash(base16().lowerCase().decode(eTagHeader));
+         to.setHash(ETagUtils.convertETagToHash(eTagHeader));
       }
       return to;
    }
