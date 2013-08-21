@@ -41,6 +41,7 @@ public class MutableObjectInfoWithMetadataImpl implements MutableObjectInfoWithM
    private byte[] hash;
    private String contentType = MediaType.APPLICATION_OCTET_STREAM;
    private Date lastModified;
+   private String objectManifest;
    private final Map<String, String> metadata = Maps.newLinkedHashMap();
 
    /**
@@ -194,6 +195,16 @@ public class MutableObjectInfoWithMetadataImpl implements MutableObjectInfoWithM
    @Override
    public URI getUri() {
       return uri;
+   }
+
+   @Override
+   public String getObjectManifest() {
+      return objectManifest;
+   }
+
+   @Override
+   public void setObjectManifest(String objectManifest) {
+      this.objectManifest = objectManifest;
    }
 
    @Override

@@ -64,6 +64,8 @@ public class ParseObjectInfoFromHeaders implements Function<HttpResponse, Mutabl
       if (eTagHeader != null) {
          to.setHash(base16().lowerCase().decode(eTagHeader));
       }
+      to.setObjectManifest(from.getFirstHeaderOrNull("X-Object-Manifest"));
+
       return to;
    }
 

@@ -48,4 +48,5 @@ public interface MutableObjectInfoWithMetadata extends ObjectInfo {
 
    Map<String, String> getMetadata();
 
+   void setObjectManifest(String objectManifest);
 }

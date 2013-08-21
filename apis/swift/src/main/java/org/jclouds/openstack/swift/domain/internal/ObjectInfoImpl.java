@@ -56,6 +56,7 @@ public class ObjectInfoImpl implements ObjectInfo {
       protected Long bytes;
       protected String contentType;
       protected Date lastModified;
+      protected String objectManifest;
 
       /**
        * @see ObjectInfoImpl#getName()
@@ -113,8 +114,16 @@ public class ObjectInfoImpl implements ObjectInfo {
          return self();
       }
 
+      /**
+       * @see ObjectInfoImpl#getObjectManifest()
+       */
+      public T objectManifest(String objectManifest) {
+         this.objectManifest = objectManifest;
+         return self();
+      }
+
       public ObjectInfoImpl build() {
-         return new ObjectInfoImpl(name, container, uri, hash, bytes, contentType, lastModified);
+         return new ObjectInfoImpl(name, container, uri, hash, bytes, contentType, lastModified, objectManifest);
       }
 
       public T fromObjectInfoImpl(ObjectInfoImpl in) {
@@ -145,12 +154,14 @@ public class ObjectInfoImpl implements ObjectInfo {
    private final String contentType;
    @Named("last_modified")
    private final Date lastModified;
+   @Named("object_manifest")
+   private final String objectManifest;
 
    @ConstructorProperties({
-         "name", "container", "uri", "hash", "bytes", "content_type", "last_modified"
+         "name", "container", "uri", "hash", "bytes", "content_type", "last_modified", "object_manifest"
    })
    protected ObjectInfoImpl(String name, @Nullable String container, @Nullable URI uri, @Nullable byte[] hash, @Nullable Long bytes,
-                            @Nullable String contentType, @Nullable Date lastModified) {
+                            @Nullable String contentType, @Nullable Date lastModified, @Nullable String objectManifest) {
       this.name = checkNotNull(name, "name");
       this.container = container;
       this.uri = uri;
@@ -158,6 +169,7 @@ public class ObjectInfoImpl implements ObjectInfo {
       this.bytes = bytes;
       this.contentType = contentType;
       this.lastModified = lastModified;
+      this.objectManifest = objectManifest;
    }
 
    /**
@@ -213,6 +225,14 @@ public class ObjectInfoImpl implements ObjectInfo {
    @Nullable
    public Date getLastModified() {
       return this.lastModified;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Nullable
+   public String getObjectManifest() {
+      return this.objectManifest;
    }
 
    @Override
