@@ -16,24 +16,19 @@
  */
 package org.jclouds.openstack.swift.utils;
 
-import static com.google.common.io.BaseEncoding.base16;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 /**
- * Converts ETag header values to byte arrays.
- *
  * @author Francis Devereux
  */
-public class ETagUtils {
-   public static byte[] convertETagToHash(String eTag) {
-      eTag = unquote(eTag);
-      return base16().lowerCase().decode(eTag);
-   }
-
-   static String unquote(String eTag) {
-      if (eTag.length() >= 2 &&
-          eTag.startsWith("\"") && eTag.endsWith("\"")) {
-         eTag = eTag.substring(1, eTag.length() - 1);
-      }
-      return eTag;
+@Test(groups = "unit")
+public class ETagUtilsTest {
+   @Test
+   public void testNoExceptionUnquotingSingleDQuote() {
+      String singleDQuoteCharacter = "\"";
+      assertEquals(ETagUtils.unquote(singleDQuoteCharacter),
+                   singleDQuoteCharacter);
    }
 }
