@@ -114,6 +114,11 @@
       <id>jclouds-github-pages-site</id>
       <url>${maven.site.url.base}/${project.version}</url>
     </site>
+    <snapshotRepository>
+      <id>bright-interactive.com</id>
+      <name>bright-interactive.com-snapshots</name>
+      <url>http://artifactory.bright-interactive.com/libs-snapshot-local</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <developers>
