@@ -40,5 +40,4 @@ public interface ObjectInfo extends Comparable<ObjectInfo> {
 
    String getContainer();
 
-   String getObjectManifest();
 }
