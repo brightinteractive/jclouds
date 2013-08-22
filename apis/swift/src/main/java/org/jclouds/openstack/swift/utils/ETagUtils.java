@@ -23,16 +23,25 @@ import com.google.common.annotations.VisibleForTesting;
 import static com.google.common.io.BaseEncoding.base16;
 
 /**
- * Converts ETag header values to byte arrays.
- *
  * @author Francis Devereux
  */
 public class ETagUtils {
    private static final Pattern QUOTED_STRING = Pattern.compile("^\"(.*)\"$");
 
-   public static byte[] convertETagToHash(String eTag) {
-      eTag = unquote(eTag);
-      return base16().lowerCase().decode(eTag);
+   /**
+    * <p>Converts the ETag of an OpenStack object to a byte array.</p>
+    *
+    * <p>Not applicable to all ETags, only those of OpenStack objects. According
+    * to the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11">HTTP spec</a>
+    * an eTag can be any string, but the
+    * <a href="http://docs.openstack.org/trunk/openstack-object-storage/admin/content/additional-notes-on-large-objects.html">OpenStack Object Storage Administration Guide</a>
+    * says that the ETag of an OpenStack object will be an MD5 sum (and MD5 sums
+    * are conventionally represented as hex strings). This method only accepts
+    * hex strings as input, not arbitrary strings.</p>
+    */
+   public static byte[] convertHexETagToByteArray(String hexETag) {
+      hexETag = unquote(hexETag);
+      return base16().lowerCase().decode(hexETag);
    }
 
    @VisibleForTesting

@@ -63,7 +63,7 @@ public class ParseObjectInfoFromHeaders implements Function<HttpResponse, Mutabl
       to.setUri(base.getUri());
       String eTagHeader = from.getFirstHeaderOrNull(HttpHeaders.ETAG);
       if (eTagHeader != null) {
-         to.setHash(ETagUtils.convertETagToHash(eTagHeader));
+         to.setHash(ETagUtils.convertHexETagToByteArray(eTagHeader));
       }
       return to;
    }

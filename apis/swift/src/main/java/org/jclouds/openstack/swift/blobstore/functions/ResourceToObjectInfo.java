@@ -47,7 +47,7 @@ public class ResourceToObjectInfo implements Function<StorageMetadata, MutableOb
          to.setContentType("application/directory");
       }
       if (from.getETag() != null && to.getHash() == null)
-         to.setHash(ETagUtils.convertETagToHash(from.getETag()));
+         to.setHash(ETagUtils.convertHexETagToByteArray(from.getETag()));
       to.setName(from.getName());
       to.setLastModified(from.getLastModified());
       if (from.getUserMetadata() != null) {
