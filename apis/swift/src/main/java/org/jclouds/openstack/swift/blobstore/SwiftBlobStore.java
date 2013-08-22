@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.blobstore.domain.BlobMetadata;
@@ -245,15 +246,24 @@ public class SwiftBlobStore extends BaseBlobStore {
    }
 
    private void removeObjectsWithPrefix(String containerAndPrefix) {
-      int separatorIndex = containerAndPrefix.indexOf('/');
-      checkArgument(separatorIndex >= 0,
-                    "No / separator found in \"%s\"",
-                    containerAndPrefix);
+      String[] parts = splitContainerAndKey(containerAndPrefix);
 
-      String container = containerAndPrefix.substring(0, separatorIndex);
-      String prefix = containerAndPrefix.substring(separatorIndex + 1);
+      String container = parts[0];
+      String prefix = parts[1];
 
       removeObjectsWithPrefix(container, prefix);
+   }
+
+   @VisibleForTesting
+   static String[] splitContainerAndKey(String containerAndKey) {
+      int separatorIndex = containerAndKey.indexOf('/');
+      checkArgument(separatorIndex >= 0,
+                    "No / separator found in \"%s\"",
+                    containerAndKey);
+      return new String[] {
+         containerAndKey.substring(0, separatorIndex),
+         containerAndKey.substring(separatorIndex + 1),
+      };
    }
 
    private void removeObjectsWithPrefix(String container, String prefix) {
