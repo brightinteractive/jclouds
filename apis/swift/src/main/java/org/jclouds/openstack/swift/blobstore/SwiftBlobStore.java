@@ -124,7 +124,7 @@ public class SwiftBlobStore extends BaseBlobStore {
    }
 
    /**
-    * This implementation invokes {@link CommonSwiftClient#putBucketInRegion}
+    * This implementation invokes {@link CommonSwiftClient#createContainer}
     * 
     * @param location
     *           currently ignored
@@ -151,7 +151,7 @@ public class SwiftBlobStore extends BaseBlobStore {
    }
 
    /**
-    * This implementation invokes {@link CommonSwiftClient#blobExists}
+    * This implementation invokes {@link CommonSwiftClient#objectExists}
     * 
     * @param container
     *           container name
