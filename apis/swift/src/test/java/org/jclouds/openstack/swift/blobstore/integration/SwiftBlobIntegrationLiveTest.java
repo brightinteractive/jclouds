@@ -92,17 +92,20 @@ public class SwiftBlobIntegrationLiveTest extends BaseBlobIntegrationTest {
    }
     
    public void testMultipartChunkedFileStream() throws IOException, InterruptedException {
-       Files.copy(oneHundredOneConstitutions, new File("target/const.txt"));
-       String containerName = getContainerName();
+      String containerName = getContainerName();
+      try {
+         addMultipartBlobToContainer(containerName, "const.txt");
+      } finally {
+          returnContainer(containerName);
+      }
+   }
 
-       try {
-           BlobStore blobStore = view.getBlobStore();
-           blobStore.createContainerInLocation(null, containerName);
-           Blob blob = blobStore.blobBuilder("const.txt")
-                   .payload(new File("target/const.txt")).contentMD5(oneHundredOneConstitutionsMD5).build();
-           blobStore.putBlob(containerName, blob, PutOptions.Builder.multipart());
-       } finally {
-           returnContainer(containerName);
-       }
+   protected void addMultipartBlobToContainer(String containerName, String key) throws IOException {
+      Files.copy(oneHundredOneConstitutions, new File("target/const.txt"));
+      BlobStore blobStore = view.getBlobStore();
+      blobStore.createContainerInLocation(null, containerName);
+      Blob blob = blobStore.blobBuilder(key)
+         .payload(new File("target/const.txt")).contentMD5(oneHundredOneConstitutionsMD5).build();
+      blobStore.putBlob(containerName, blob, PutOptions.Builder.multipart());
    }
 }
