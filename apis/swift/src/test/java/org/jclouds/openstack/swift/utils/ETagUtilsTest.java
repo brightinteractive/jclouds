@@ -14,41 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jclouds.openstack.swift.domain;
+package org.jclouds.openstack.swift.utils;
 
-import java.net.URI;
-import java.util.Date;
-import java.util.Map;
+import org.testng.annotations.Test;
 
-import org.jclouds.openstack.swift.domain.internal.MutableObjectInfoWithMetadataImpl;
-
-import com.google.inject.ImplementedBy;
+import static org.testng.Assert.assertEquals;
 
 /**
- * 
- * @author Adrian Cole
- * 
+ * @author Francis Devereux
  */
-@ImplementedBy(MutableObjectInfoWithMetadataImpl.class)
-public interface MutableObjectInfoWithMetadata extends ObjectInfo {
-
-   void setName(String name);
-
-   void setHash(byte[] hash);
-
-   void setBytes(Long bytes);
-
-   void setLastModified(Date lastModified);
-
-   void setContentType(String contentType);
-
-   void setContainer(String container);
-
-   void setUri(URI uri);
-
-   Map<String, String> getMetadata();
-
-   String getObjectManifest();
-
-   void setObjectManifest(String objectManifest);
+@Test(groups = "unit")
+public class ETagUtilsTest {
+   @Test
+   public void testNoExceptionUnquotingSingleDQuote() {
+      String singleDQuoteCharacter = "\"";
+      assertEquals(ETagUtils.unquote(singleDQuoteCharacter),
+                   singleDQuoteCharacter);
+   }
 }
