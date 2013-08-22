@@ -40,7 +40,7 @@ public class ParseObjectInfoFromHeadersTest extends BasePayloadTest {
       );
    }
 
-   public void testQuotedEtagIssue() {
+   public void testParseEtagWithQuotes() {
       assertETagCanBeParsed("\"feb1\"",
                             new byte[] { (byte) 0xfe, (byte) 0xb1 }
       );
