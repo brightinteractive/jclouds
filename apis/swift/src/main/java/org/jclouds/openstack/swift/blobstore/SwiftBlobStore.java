@@ -231,7 +231,7 @@ public class SwiftBlobStore extends BaseBlobStore {
     */
    @Override
    public void removeBlob(String container, String key) {
-      String objectManifest = getObjectManifest(container, key);
+      String objectManifest = getObjectManifestOrNull(container, key);
 
       sync.removeObject(container, key);
 
@@ -240,7 +240,7 @@ public class SwiftBlobStore extends BaseBlobStore {
       }
    }
 
-   private String getObjectManifest(String container, String key) {
+   private String getObjectManifestOrNull(String container, String key) {
       MutableObjectInfoWithMetadata objectInfo = sync.getObjectInfo(container, key);
       return objectInfo == null ? null : objectInfo.getObjectManifest();
    }
