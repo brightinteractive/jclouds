@@ -256,14 +256,11 @@ public class SwiftBlobStore extends BaseBlobStore {
 
    @VisibleForTesting
    static String[] splitContainerAndKey(String containerAndKey) {
-      int separatorIndex = containerAndKey.indexOf('/');
-      checkArgument(separatorIndex >= 0,
+      String[] parts = containerAndKey.split("/", 2);
+      checkArgument(parts.length == 2,
                     "No / separator found in \"%s\"",
                     containerAndKey);
-      return new String[] {
-         containerAndKey.substring(0, separatorIndex),
-         containerAndKey.substring(separatorIndex + 1),
-      };
+      return parts;
    }
 
    private void removeObjectsWithPrefix(String container, String prefix) {
