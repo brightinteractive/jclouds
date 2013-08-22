@@ -18,6 +18,8 @@ package org.jclouds.openstack.swift.utils;
 
 import java.util.regex.Pattern;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import static com.google.common.io.BaseEncoding.base16;
 
 /**
@@ -33,6 +35,7 @@ public class ETagUtils {
       return base16().lowerCase().decode(eTag);
    }
 
+   @VisibleForTesting
    static String unquote(String eTag) {
       return QUOTED_STRING.matcher(eTag).replaceAll("$1");
    }
