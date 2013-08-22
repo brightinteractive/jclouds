@@ -16,6 +16,8 @@
  */
 package org.jclouds.openstack.swift.utils;
 
+import java.util.regex.Pattern;
+
 import static com.google.common.io.BaseEncoding.base16;
 
 /**
@@ -24,16 +26,14 @@ import static com.google.common.io.BaseEncoding.base16;
  * @author Francis Devereux
  */
 public class ETagUtils {
+   private static final Pattern QUOTED_STRING = Pattern.compile("^\"(.*)\"$");
+
    public static byte[] convertETagToHash(String eTag) {
       eTag = unquote(eTag);
       return base16().lowerCase().decode(eTag);
    }
 
    static String unquote(String eTag) {
-      if (eTag.length() >= 2 &&
-          eTag.startsWith("\"") && eTag.endsWith("\"")) {
-         eTag = eTag.substring(1, eTag.length() - 1);
-      }
-      return eTag;
+      return QUOTED_STRING.matcher(eTag).replaceAll("$1");
    }
 }
