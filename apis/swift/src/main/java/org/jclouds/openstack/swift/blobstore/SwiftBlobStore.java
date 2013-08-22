@@ -52,6 +52,7 @@ import org.jclouds.openstack.swift.blobstore.functions.ObjectToBlob;
 import org.jclouds.openstack.swift.blobstore.functions.ObjectToBlobMetadata;
 import org.jclouds.openstack.swift.blobstore.strategy.internal.MultipartUploadStrategy;
 import org.jclouds.openstack.swift.domain.ContainerMetadata;
+import org.jclouds.openstack.swift.domain.MutableObjectInfoWithMetadata;
 import org.jclouds.openstack.swift.domain.ObjectInfo;
 
 import com.google.common.base.Function;
@@ -229,13 +230,18 @@ public class SwiftBlobStore extends BaseBlobStore {
     */
    @Override
    public void removeBlob(String container, String key) {
-      String objectManifest = sync.getObjectInfo(container, key).getObjectManifest();
+      String objectManifest = getObjectManifest(container, key);
 
       sync.removeObject(container, key);
 
       if (!Strings.isNullOrEmpty(objectManifest)) {
          removeObjectsWithPrefix(objectManifest);
       }
+   }
+
+   private String getObjectManifest(String container, String key) {
+      MutableObjectInfoWithMetadata objectInfo = sync.getObjectInfo(container, key);
+      return objectInfo == null ? null : objectInfo.getObjectManifest();
    }
 
    private void removeObjectsWithPrefix(String containerAndPrefix) {
