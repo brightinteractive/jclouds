@@ -16,6 +16,7 @@
  */
 package org.jclouds.openstack.swift.blobstore;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.blobstore.util.BlobStoreUtils.createParentIfNeededAsync;
 import static org.jclouds.openstack.swift.options.ListContainerOptions.Builder.withPrefix;
@@ -51,7 +52,6 @@ import org.jclouds.openstack.swift.blobstore.functions.ObjectToBlob;
 import org.jclouds.openstack.swift.blobstore.functions.ObjectToBlobMetadata;
 import org.jclouds.openstack.swift.blobstore.strategy.internal.MultipartUploadStrategy;
 import org.jclouds.openstack.swift.domain.ContainerMetadata;
-import org.jclouds.openstack.swift.domain.MutableObjectInfoWithMetadata;
 import org.jclouds.openstack.swift.domain.ObjectInfo;
 
 import com.google.common.base.Function;
@@ -229,7 +229,8 @@ public class SwiftBlobStore extends BaseBlobStore {
     */
    @Override
    public void removeBlob(String container, String key) {
-      String objectManifest = getObjectManifest(container, key);
+      String objectManifest = sync.getObjectInfo(container, key).getObjectManifest();
+
       sync.removeObject(container, key);
 
       if (!Strings.isNullOrEmpty(objectManifest)) {
@@ -237,16 +238,12 @@ public class SwiftBlobStore extends BaseBlobStore {
       }
    }
 
-   private String getObjectManifest(String container, String key) {
-      MutableObjectInfoWithMetadata info = sync.getObjectInfo(container, key);
-      return info.getObjectManifest();
-   }
-
    private void removeObjectsWithPrefix(String containerAndPrefix) {
       int separatorIndex = containerAndPrefix.indexOf('/');
-      if (separatorIndex < 0) {
-         throw new IllegalArgumentException("No / separator found in \"" + containerAndPrefix + "\"");
-      }
+      checkArgument(separatorIndex >= 0,
+                    "No / separator found in \"%s\"",
+                    containerAndPrefix);
+
       String container = containerAndPrefix.substring(0, separatorIndex);
       String prefix = containerAndPrefix.substring(separatorIndex + 1);
 
